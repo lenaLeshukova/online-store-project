@@ -1,0 +1,18 @@
+[
+{
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+        "name": "Ёлектроника",
+        "description": "√аджеты и девайсы"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+        "name": " ниги",
+        "description": "ѕечатные издани€"
+    }
+}
+]
