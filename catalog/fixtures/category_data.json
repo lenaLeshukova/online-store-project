@@ -1,18 +1,10 @@
 [
 {
     "model": "catalog.category",
-    "pk": 1,
+    "pk": 6,
     "fields": {
-        "name": "Электроника",
-        "description": "Гаджеты и девайсы"
-    }
-},
-{
-    "model": "catalog.category",
-    "pk": 2,
-    "fields": {
-        "name": "Книги",
-        "description": "Печатные издания"
+        "name": "Р­Р»РµРєС‚СЂРѕРЅРёРєР°",
+        "description": "Р“Р°РґР¶РµС‚С‹"
     }
 }
 ]
