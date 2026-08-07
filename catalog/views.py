@@ -1,31 +1,23 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from catalog.models import Product
-from catalog.forms import ContactForm
+from django.views.generic import ListView, DetailView, CreateView
+from django.urls import reverse_lazy
+from .models import Product
+from .forms import ContactForm
 
 
-def home(request):
-    # Использован лаконичный запрос
-    products = Product.objects.all()
-    # Контекст 'products' соответствует стилю 'books' в примере
-    context = {'products': products}
-    return render(request, 'catalog/home.html', context)
+class ProductListView(ListView):
+    """Главная страница со списком товаров"""
+    model = Product
+    template_name = 'catalog/home.html'
+    context_object_name = 'products'
 
+class ProductDetailView(DetailView):
+    """Страница детального просмотра товара"""
+    model = Product
+    template_name = 'catalog/product_detail.html'
+    context_object_name = 'product'
 
-def product_detail(request, pk):
-    # Контроллер получает pk, извлекает объект через ORM
-    product = get_object_or_404(Product, pk=pk)
-    # Контекст 'product' соответствует стилю 'book' в примере
-    context = {'product': product}
-    return render(request, 'catalog/product_detail.html', context)
-
-
-def contacts(request):
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('catalog:contacts')
-    else:
-        form = ContactForm()
-
-    return render(request, 'catalog/contacts.html', {'form': form})
+class ContactsView(CreateView):
+    """Страница контактов с обработкой формы обратной связи"""
+    form_class = ContactForm
+    template_name = 'catalog/contacts.html'
+    success_url = reverse_lazy('catalog:contacts')

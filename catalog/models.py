@@ -44,7 +44,6 @@ class Product(models.Model):
         verbose_name='Категория'
     )
     price = models.DecimalField(
-        max_length=10,
         max_digits=10,
         decimal_places=2,
         verbose_name='Цена за покупку'

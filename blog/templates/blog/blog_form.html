@@ -1,0 +1,14 @@
+{% extends 'catalog/base.html' %}
+
+{% block content %}
+<div class="container mt-4" style="max-width: 600px;">
+    <h2>{% if object %}Редактирование{% else %}Создание статьи{% endif %}</h2>
+    <hr>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success mt-3">Сохранить</button>
+        <a href="{% if object %}{% url 'blog:detail' object.pk %}{% else %}{% url 'blog:list' %}{% endif %}" class="btn btn-secondary mt-3">Отмена</a>
+    </form>
+</div>
+{% endblock %}
