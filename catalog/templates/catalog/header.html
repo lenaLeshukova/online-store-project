@@ -1,0 +1,8 @@
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center col-lg-8">
+    {% if request.resolver_match.url_name == 'contacts' %}
+        <h1 class="display-4">Контакты</h1>
+    {% else %}
+        <h1 class="display-4">Skystore</h1>
+        <p class="lead text-muted">Skystore - это отличный вариант хранения ваших плагинов и примеров кода, который вы бы хотели продать</p>
+    {% endif %}
+</div>
