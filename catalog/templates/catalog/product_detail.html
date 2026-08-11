@@ -31,6 +31,8 @@
                     <h3 class="pricing-card-title text-success mb-3">${{ product.price }}</h3>
                     <!-- Переход обратно на главную страницу -->
                     <a href="{% url 'catalog:home' %}" class="btn btn-lg btn-outline-secondary w-100">Назад в каталог</a>
+                    <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning">Редактировать</a>
+                    <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить товар</a>
                 </div>
             </div>
         </div>
