@@ -7,9 +7,10 @@
 {% include 'catalog/header.html' %}
 
 <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center text-center">
+    <a href="{% url 'catalog:product_create' %}" class="btn btn-primary mb-3">Добавить товар</a>
     {% for product in products %}
     <div class="col">
-        <div class="card h-100 mb-4 box-shadow">
+       <div class="card h-100 mb-4 box-shadow">
             <div class="card-header py-3">
                 <h4 class="my-0 fs-5 font-weight-normal">{{ product.name }}</h4>
             </div>
@@ -24,7 +25,6 @@
                 </div>
 
                 <h1 class="card-title pricing-card-title">${{ product.price }}</h1>
-
                 <!-- Описание обрезается ровно до 100 символов -->
                 <p class="card-text text-start px-3 flex-grow-1">{{ product.description|truncatechars:100 }}</p>
 
