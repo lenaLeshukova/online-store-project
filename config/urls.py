@@ -6,7 +6,10 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('catalog.urls', namespace='catalog')),
-    path('', include('blog.urls', namespace='blog')),  # Подключение блога
+    path('blogs/', include('blog.urls', namespace='blog')),# Подключение
+# блога
+    path('users/', include('users.urls', namespace='users')),  # Подключение
+# Юзерс
 ]
 
 if settings.DEBUG:

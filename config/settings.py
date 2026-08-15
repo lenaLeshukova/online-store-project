@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'catalog',
     'blog',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -31,6 +32,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'catalog.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -98,7 +100,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
@@ -106,3 +108,22 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+AUTH_USER_MODEL = 'users.User'
+
+LOGIN_URL = 'users:login'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+# Подтягиваем секретные данные из переменных окружения
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+LOGIN_REDIRECT_URL = 'catalog:home'   # Куда переходить после входа
+LOGOUT_REDIRECT_URL = 'catalog:home' # Куда переходить после выхода
