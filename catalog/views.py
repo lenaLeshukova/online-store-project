@@ -1,7 +1,10 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Product
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
+    DeleteView
+
 from .forms import ContactForm, ProductForm
+from .models import Product
 
 
 class ProductListView(ListView):
@@ -10,8 +13,8 @@ class ProductListView(ListView):
     template_name = 'catalog/home.html'
     context_object_name = 'products'
 
-class ProductDetailView(DetailView):
-    """Страница детального просмотра товара"""
+class ProductDetailView(LoginRequiredMixin, DetailView):
+    """Доступ только авторизованным"""
     model = Product
     template_name = 'catalog/product_detail.html'
     context_object_name = 'product'
@@ -23,27 +26,26 @@ class ContactsView(CreateView):
     success_url = reverse_lazy('catalog:contacts')
 
 
-class ProductCreateView(CreateView):
-    """Создание нового продукта"""
+class ProductCreateView(LoginRequiredMixin, CreateView):
+    """Доступ только авторизованным"""
     model = Product
     form_class = ProductForm
     template_name = 'catalog/product_form.html'
     success_url = reverse_lazy('catalog:home')
 
 
-class ProductUpdateView(UpdateView):
-    """Редактирование существующего продукта"""
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
+    """Доступ только авторизованным"""
     model = Product
     form_class = ProductForm
     template_name = 'catalog/product_form.html'
 
     def get_success_url(self):
-        """Перенаправление на страницу отредактированного товара"""
         return reverse('catalog:product_detail', kwargs={'pk': self.object.pk})
 
 
-class ProductDeleteView(DeleteView):
-    """Удаление продукта"""
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
+    """Доступ только авторизованным"""
     model = Product
     template_name = 'catalog/product_confirm_delete.html'
     success_url = reverse_lazy('catalog:home')
