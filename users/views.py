@@ -1,9 +1,12 @@
-from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic import CreateView
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
-from config import settings
+from django.views.generic import CreateView
+from django.views.generic import UpdateView
+
+from users.forms import UserProfileForm
 from users.forms import UserRegisterForm, UserLoginForm
 
 
@@ -55,3 +58,11 @@ class UserLogoutView(LogoutView):
     # В Django 5.0+ LogoutView требует метод POST, перенаправление настроим в форме
     next_page = reverse_lazy('catalog:home')
 
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    form_class = UserProfileForm
+    template_name = 'users/profile.html'
+    success_url = reverse_lazy('users:profile')  # Перенаправление на эту же страницу после сохранения
+
+    def get_object(self, queryset=None):
+        # Метод возвращает текущего вошедшего пользователя для редактирования
+        return self.request.user
