@@ -1,0 +1,62 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}Skystore - Контакты{% endblock %}
+
+{% block content %}
+<!-- Подключаем наш общий подшаблон шапки (он автоматически переключится на заголовок "Контакты") -->
+{% include 'catalog/header.html' %}
+
+<div class="row text-start">
+    <!-- Левая колонка: Реквизиты и адрес компании -->
+    <div class="col-lg-9 col-md-6 col-sm-12">
+        <div class="card mb-4 box-shadow">
+            <div class="card-body">
+                <table class="table table-striped align-middle">
+                    <tr>
+                        <td class="w-25">Страна</td>
+                        <td>USA</td>
+                    </tr>
+                    <tr>
+                        <td class="w-25">ИНН</td>
+                        <td>91-1144442</td>
+                    </tr>
+                    <tr>
+                        <td class="w-25">Адрес</td>
+                        <td>Redmond, WA, 98052-6399</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Правая колонка: Защищенная форма обратной связи -->
+    <div class="col-lg-3 col-md-6 col-sm-12">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header py-3">
+                <h4 class="my-0 fs-5 font-weight-normal text-center">Свяжитесь с нами</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" action="">
+                    {% csrf_token %}
+                    
+                    <!-- Цикл автоматически генерирует поля формы из Django Forms -->
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            <!-- Защита от ошибок: вывод сообщений валидации, если поле заполнено неверно -->
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ field.errors|striptags }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    
+                    <button type="submit" class="btn btn-lg btn-primary w-100">Отправить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

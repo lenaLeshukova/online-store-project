@@ -1,0 +1,82 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}{{ product.name }} - Детали товара{% endblock %}
+
+{% block content %}
+<!-- Подключаем наш общий подшаблон шапки -->
+{% include 'catalog/header.html' %}
+
+<div class="card mb-4 box-shadow mt-5">
+    <div class="row g-0">
+        <!-- Блок для отображения изображения товара -->
+        <div class="col-md-6 text-center bg-light p-3 d-flex align-items-center justify-content-center" style="max-height: 450px;">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" class="img-fluid rounded-start h-100" style="object-fit: contain;" alt="{{ product.name }}">
+            {% else %}
+                <img src="https://placehold.co" class="img-fluid rounded-start" alt="Нет фото">
+            {% endif %}
+        </div>
+        <!-- Блок с текстовой информацией -->
+        <div class="col-md-6">
+            <div class="card-body d-flex flex-column h-100 p-4">
+                <h2 class="card-title mb-1">{{ product.name }}</h2>
+
+                <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+                    <span class="text-muted small">Категория: <span class="badge bg-primary">{{ product.category.name }}</span></span>
+                    <!-- Статус публикации товара -->
+                    <span class="small">
+                        Статус:
+                        {% if product.is_published %}
+                            <span class="badge bg-success">Опубликован</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">На модерации</span>
+                        {% endif %}
+                    </span>
+                </div>
+
+                <hr>
+
+                <h5 class="font-weight-normal">Описание плагина:</h5>
+                <!-- Полное описание без обрезки -->
+                <p class="card-text text-muted flex-grow-1 fs-5">{{ product.description }}</p>
+
+                <!-- Информация о владельце -->
+                <p class="small text-secondary mb-3">
+                    Владелец: {% if product.owner %}{{ product.owner.email }}{% else %}Система{% endif %}
+                </p>
+
+                <div class="mt-auto">
+                    <!-- Цена в рублях -->
+                    <h3 class="pricing-card-title text-success mb-3">{{ product.price }} руб.</h3>
+
+                    <div class="d-flex flex-wrap gap-2">
+                        <!-- Переход обратно на главную страницу -->
+                        <a href="{% url 'catalog:home' %}" class="btn btn-outline-secondary flex-grow-1">Назад в каталог</a>
+
+                        <!-- Кнопка РЕДАКТИРОВАНИЯ: Показывается владельцу ИЛИ модератору -->
+                        {% if product.owner == user or perms.catalog.can_unpublish_product %}
+                            <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning">Редактировать</a>
+                        {% endif %}
+
+
+                        <!-- Кнопка УДАЛЕНИЯ: Показывается владельцу ИЛИ модератору с правом delete_product -->
+                        {% if product.owner == user or perms.catalog.delete_product %}
+                            <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить продукт</a>
+                        {% endif %}
+
+                        <!-- Кнопка МОДЕРАЦИИ: Показывается только модератору с правом can_unpublish_product -->
+                        {% if perms.catalog.can_unpublish_product %}
+                            <form action="{% url 'catalog:toggle_publish' product.pk %}" method="post" class="d-inline flex-grow-1">
+                                {% csrf_token %}
+                                <button type="submit" class="btn w-100 {% if product.is_published %}btn-outline-danger{% else %}btn-success{% endif %}">
+                                    {% if product.is_published %}Снять с публикации{% else %}Опубликовать{% endif %}
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
