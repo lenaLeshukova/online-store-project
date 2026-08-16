@@ -12,6 +12,8 @@ class LoginRequiredMiddleware:
             'catalog:home',
             'users:login',
             'users:register',
+            'catalog:category_products', # РАЗРЕШИЛИ СТРАНИЦУ КАТЕГОРИЙ ДЛЯ
+            # ВСЕХ
         ]
 
         # Разрешаем системные пути (админка, статика, медиа) без авторизации

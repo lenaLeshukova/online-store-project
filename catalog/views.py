@@ -5,10 +5,13 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
-    DeleteView, TemplateView  # Добавили TemplateView
+    DeleteView
+from django.views.generic import TemplateView
 
 from catalog.forms import ProductForm
+from catalog.models import Category
 from catalog.models import Product
+from catalog.services import get_products_by_category
 
 
 class ProductListView(ListView):
@@ -61,7 +64,7 @@ class ProductUpdateView(UpdateView):
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
 
-        # КРИТЕРИЙ: Продукт может изменить только пользователь, который его создал, или модератор.
+        # Продукт может изменить только пользователь, который его создал, или модератор.
         is_owner = self.object.owner == self.request.user
         is_moderator = self.request.user.has_perm('catalog.can_unpublish_product')
 
@@ -112,3 +115,19 @@ class TogglePublishView(View):
 class ContactsView(TemplateView):
     """Страница контактов"""
     template_name = 'catalog/contacts.html'
+
+
+class CategoryProductListView(TemplateView):
+    """Представление для вывода продуктов конкретной категории через сервисный слой"""
+    template_name = 'catalog/category_products.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category_id = self.kwargs.get('pk')
+
+        # Получаем саму категорию для заголовка на странице
+        context['category'] = Category.objects.get(pk=category_id)
+
+        # View использует сервис для получения закэшированных данных
+        context['products'] = get_products_by_category(category_id)
+        return context

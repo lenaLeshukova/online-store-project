@@ -127,3 +127,14 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 LOGIN_REDIRECT_URL = 'catalog:home'   # Куда переходить после входа
 LOGOUT_REDIRECT_URL = 'catalog:home' # Куда переходить после выхода
+
+# Настройка кэширования через встроенный бэкенд Redis в Django
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379',
+    }
+}
+
+# Время жизни кэша по умолчанию (например, 5 минут / 300 секунд)
+CACHE_TTL = 300

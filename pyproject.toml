@@ -13,6 +13,7 @@ psycopg2-binary = "^2.9.12"
 pillow = "^12.3.0"
 python-dotenv = "^1.2.2"
 ipython = "^9.16.0"
+redis = "^5.2.0"
 
 [build-system]
 requires = ["poetry-core"]
